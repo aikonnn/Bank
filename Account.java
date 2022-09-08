@@ -4,8 +4,10 @@
 
 public class Account{
   int balance;
+  String name;
   
-  static int balance{
+  Account(String name, int balance){
     this.balance = balance;
+    this.name = name;
   }
 }
