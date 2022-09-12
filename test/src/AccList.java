@@ -1,7 +1,7 @@
 import java.util.HashMap;
 
 public class AccList {
-    HashMap< Integer, Account> collection = new HashMap<Integer, Account>();
+    HashMap< Long, Account> collection = new HashMap<Long, Account>();
 
     public void addAccount(Account acc)
     {
