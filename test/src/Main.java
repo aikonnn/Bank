@@ -41,11 +41,45 @@ public class Main {
                     Account testacc = accountCreate();
                     testacc.display();
                     list.addAccount(testacc);
-                    on = 0;
                     break;
 
                 case 2:
-                    System.out.println("Deposit not available  yet!");
+                    System.out.println("Enter the account number to deposit to (0 to cancel):");
+                    long usernum = -1;
+                    while( usernum != 0){
+                        try {
+                            usernum = Long.parseLong(user.nextLine());
+                        }
+                        catch(Exception e){
+                            System.out.println("Enter number");
+                            continue;
+                        }
+
+                        if(!list.collection.containsKey(usernum)){
+                            System.out.println("Account not found!");
+                            System.out.println("Please retry:");
+                            continue;
+                        }
+                        else{
+                            System.out.println("Please enter the amount to be deposited");
+                            int amount;
+                            try{
+                                amount = Integer.parseInt(user.nextLine());
+                            }
+                            catch(Exception e){
+                                System.out.println("Invalid!");
+                                System.out.println("Please try again!");
+                                continue;
+                            }
+
+                            Account target = list.collection.get(usernum);
+                            target.balance+=amount;
+                            System.out.println("Success!");
+                            System.out.println(amount +" have been added to " + target.name +"'s account!");
+
+                            break;
+                        }
+                    }
                     on = 0;
                     break;
 
