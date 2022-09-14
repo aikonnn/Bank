@@ -36,57 +36,20 @@ public class Main {
                 continue;
             }
 
-            switch(choice){
-                case 1:
-                    Account testacc = accountCreate();
-                    testacc.display();
-                    list.addAccount(testacc);
-                    break;
-
-                case 2:
-                    System.out.println("Enter the account number to deposit to (0 to cancel):");
-                    long usernum = -1;
-                    while( usernum != 0){
-                        try {
-                            usernum = Long.parseLong(user.nextLine());
-                        }
-                        catch(Exception e){
-                            System.out.println("Enter number");
-                            continue;
-                        }
-
-                        if(!list.collection.containsKey(usernum)){
-                            System.out.println("Account not found!");
-                            System.out.println("Please retry:");
-                            continue;
-                        }
-                        else{
-                            System.out.println("Please enter the amount to be deposited");
-                            int amount;
-                            try{
-                                amount = Integer.parseInt(user.nextLine());
-                            }
-                            catch(Exception e){
-                                System.out.println("Invalid!");
-                                System.out.println("Please try again!");
-                                continue;
-                            }
-
-                            Account target = list.collection.get(usernum);
-                            target.balance+=amount;
-                            System.out.println("Success!");
-                            System.out.println(amount +" have been added to " + target.name +"'s account!");
-
-                            break;
-                        }
-                    }
+            switch (choice) {
+                case 1 -> {
+                    Account newacc = accountCreate();
+                    newacc.display();
+                    list.addAccount(newacc);
+                }
+                case 2 -> {
+                    depositOperation(list);
                     on = 0;
-                    break;
-
-                case 3:
-                    System.out.println("Withdraw not available yet!");
+                }
+                case 3 -> {
+                    withdrawOperation(list);
                     on = 0;
-                    break;
+                }
             }
         }
     }
@@ -109,5 +72,85 @@ public class Main {
         accnum = System.currentTimeMillis();
 
         return new Account(name, accnum, initbal);
+    }
+
+    private static void depositOperation(AccList list)
+    {
+        Scanner user = new Scanner(System.in);
+
+        long usernum = -1;
+        while( usernum != 0){
+            System.out.println("Enter the account number to deposit to (0 to cancel):");
+            try {
+                usernum = Long.parseLong(user.nextLine());
+            }
+            catch(Exception e){
+                System.out.println("Enter number");
+                continue;
+            }
+
+            if(!list.collection.containsKey(usernum)){
+                System.out.println("Account not found!");
+                System.out.println("Please retry:");
+            }
+            else{
+                System.out.println("Please enter the amount to be deposited");
+                int amount;
+                try{
+                    amount = Integer.parseInt(user.nextLine());
+                }
+                catch(Exception e){
+                    System.out.println("Invalid!");
+                    System.out.println("Please try again!");
+                    continue;
+                }
+
+                Account target = list.collection.get(usernum);
+                System.out.println("Success!");
+                System.out.println(target.deposit(amount) +" is now in " + target.name +"'s account!");
+
+                return;
+            }
+        }
+    }
+
+    private static void withdrawOperation(AccList list)
+    {
+        Scanner user = new Scanner(System.in);
+
+        long usernum = -1;
+        while( usernum != 0){
+            System.out.println("Enter the account number to deposit to (0 to cancel):");
+            try {
+                usernum = Long.parseLong(user.nextLine());
+            }
+            catch(Exception e){
+                System.out.println("Enter number");
+                continue;
+            }
+
+            if(!list.collection.containsKey(usernum)){
+                System.out.println("Account not found!");
+                System.out.println("Please retry:");
+            }
+            else{
+                System.out.println("Please enter the amount to be withdrawn");
+                int amount;
+                try{
+                    amount = Integer.parseInt(user.nextLine());
+                }
+                catch(Exception e){
+                    System.out.println("Invalid!");
+                    System.out.println("Please try again!");
+                    continue;
+                }
+
+                Account target = list.collection.get(usernum);
+                System.out.println("Success!");
+                System.out.println(target.withdraw(amount) +" is now in " + target.name +"'s account!");
+
+                return;
+            }
+        }
     }
 }
