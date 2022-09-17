@@ -59,15 +59,25 @@ public class Main {
     private static Account accountCreate(){
         Scanner input = new Scanner(System.in);
         String name;
-        int initbal;
+        int initbal = 0;
         long accnum;
+        int on = 1;
 
         System.out.println("Welcome! Let's get you an account.");
         System.out.println("What's your name? :");
         name = input.nextLine();
 
-        System.out.println("What's your initial deposit? :");
-        initbal = Integer.parseInt(input.nextLine());
+        while(on == 1){
+            System.out.println("What's your initial deposit? :");
+            initbal = Integer.parseInt(input.nextLine());
+
+            if(initbal<0){
+                System.out.println("Invalid!");
+            }
+            else{
+                on = 0;
+            }
+        }
 
         accnum = System.currentTimeMillis();
 
@@ -77,9 +87,9 @@ public class Main {
     private static void depositOperation(AccList list)
     {
         Scanner user = new Scanner(System.in);
+        long usernum;
 
-        long usernum = -1;
-        while( usernum != 0){
+        while(true){
             System.out.println("Enter the account number to deposit to (0 to cancel):");
             try {
                 usernum = Long.parseLong(user.nextLine());
@@ -89,23 +99,43 @@ public class Main {
                 continue;
             }
 
+            if(usernum == 0){
+                System.out.println("Operation Cancelled!");
+                return;
+            }
+
             if(!list.collection.containsKey(usernum)){
                 System.out.println("Account not found!");
                 System.out.println("Please retry:");
             }
             else{
-                System.out.println("Please enter the amount to be deposited");
-                int amount;
-                try{
-                    amount = Integer.parseInt(user.nextLine());
-                }
-                catch(Exception e){
-                    System.out.println("Invalid!");
-                    System.out.println("Please try again!");
-                    continue;
+                System.out.println("Please enter the amount to be deposited (-1 to cancel)");
+                int amount = 0;
+                boolean on = true;
+                Account target = list.collection.get(usernum);
+
+                while(on) {
+                    try {
+                        amount = Integer.parseInt(user.nextLine());
+                    } catch (Exception e) {
+                        System.out.println("Invalid!");
+                        System.out.println("Please try again!");
+                        continue;
+                    }
+
+                    if(amount<0 && amount != -1){
+                        System.out.println("Invalid amount!");
+                    }
+                    else{
+                        on = false;
+                    }
                 }
 
-                Account target = list.collection.get(usernum);
+                if(amount == -1) {
+                    System.out.println("Cancelled!");
+                    return;
+                }
+
                 System.out.println("Success!");
                 System.out.println(target.deposit(amount) +" is now in " + target.name +"'s account!");
 
@@ -118,8 +148,9 @@ public class Main {
     {
         Scanner user = new Scanner(System.in);
 
-        long usernum = -1;
-        while( usernum != 0){
+        long usernum;
+
+        while( true ){
             System.out.println("Enter the account number to deposit to (0 to cancel):");
             try {
                 usernum = Long.parseLong(user.nextLine());
@@ -129,23 +160,44 @@ public class Main {
                 continue;
             }
 
+            if(usernum == 0){
+                System.out.println("Operation Cancelled!");
+                return;
+            }
+
             if(!list.collection.containsKey(usernum)){
                 System.out.println("Account not found!");
                 System.out.println("Please retry:");
             }
             else{
-                System.out.println("Please enter the amount to be withdrawn");
-                int amount;
-                try{
-                    amount = Integer.parseInt(user.nextLine());
-                }
-                catch(Exception e){
-                    System.out.println("Invalid!");
-                    System.out.println("Please try again!");
-                    continue;
+                boolean on = true;
+                int amount = 0;
+                Account target = list.collection.get(usernum);
+
+                while(on){
+                    System.out.println("Please enter the amount to be withdrawn (-1 to cancel)");
+                    try{
+                        amount = Integer.parseInt(user.nextLine());
+                    }
+                    catch(Exception e){
+                        System.out.println("Invalid!");
+                        System.out.println("Please try again!");
+                        continue;
+                    }
+
+                    if(amount > target.balance || (amount<0 && amount != -1)){
+                        System.out.println("Invalid amount!");
+                    }
+                    else{
+                        on = false;
+                    }
                 }
 
-                Account target = list.collection.get(usernum);
+                if(amount == -1) {
+                    System.out.println("Cancelled!");
+                    return;
+                }
+
                 System.out.println("Success!");
                 System.out.println(target.withdraw(amount) +" is now in " + target.name +"'s account!");
 
